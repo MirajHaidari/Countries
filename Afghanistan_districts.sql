@@ -20,6 +20,23 @@ SET row_security = off;
 -- Data for Name: district; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+-- Check if the table 'district' exists and create it if not
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'district') THEN
+        CREATE TABLE public.district (
+            id SERIAL PRIMARY KEY, -- Auto-incrementing primary key
+            district_local_name VARCHAR(255) UNIQUE NOT NULL, -- Unique and non-nullable
+            district_english_name VARCHAR(255) UNIQUE NOT NULL, -- Unique and non-nullable
+            status BOOLEAN NOT NULL DEFAULT true, -- Non-nullable with default value
+            province_fk_id BIGINT NOT NULL, -- Foreign key referencing 'province' table
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Default timestamp for creation
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Default timestamp for updates
+            CONSTRAINT fk_province FOREIGN KEY (province_fk_id) REFERENCES public.province (id) ON DELETE CASCADE
+        );
+    END IF;
+END $$;
+
 INSERT INTO public.district (id, created_at, district_english_name, district_local_name, province_fk_id, status, updated_at) VALUES (89, '2024-12-30 11:48:16.275049', 'Achin', 'اچین', 8, true, '2024-12-30 11:48:16.275049');
 INSERT INTO public.district (id, created_at, district_english_name, district_local_name, province_fk_id, status, updated_at) VALUES (90, '2024-12-30 11:48:16.275049', 'Nazyan', 'نازیان', 8, true, '2024-12-30 11:48:16.275049');
 INSERT INTO public.district (id, created_at, district_english_name, district_local_name, province_fk_id, status, updated_at) VALUES (91, '2024-12-30 11:48:16.275049', 'Dur Baba', 'دربابا', 8, true, '2024-12-30 11:48:16.275049');

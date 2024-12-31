@@ -20,6 +20,21 @@ SET row_security = off;
 -- Data for Name: province; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+-- Check if the table 'province' exists and create it if not
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'province') THEN
+        CREATE TABLE public.province (
+            id SERIAL PRIMARY KEY, -- Auto-incrementing primary key
+            province_local_name VARCHAR(255) UNIQUE NOT NULL, -- Unique constraint and non-null
+            province_english_name VARCHAR(255) UNIQUE NOT NULL, -- Unique constraint and non-null
+            status BOOLEAN NOT NULL DEFAULT true, -- Non-nullable with a default value
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Default timestamp
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Default timestamp
+        );
+    END IF;
+END $$;
+
 INSERT INTO public.province (id, created_at, province_english_name, province_local_name, status, updated_at) VALUES (1, '2024-12-30 11:48:16.275049', 'Kabul', 'کابل', true, '2024-12-30 11:48:16.275049');
 INSERT INTO public.province (id, created_at, province_english_name, province_local_name, status, updated_at) VALUES (2, '2024-12-30 11:48:16.275049', 'Kapisa', 'کاپیسا', true, '2024-12-30 11:48:16.275049');
 INSERT INTO public.province (id, created_at, province_english_name, province_local_name, status, updated_at) VALUES (3, '2024-12-30 11:48:16.275049', 'Parwan', 'پروان', true, '2024-12-30 11:48:16.275049');
